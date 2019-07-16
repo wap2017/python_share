@@ -2,7 +2,6 @@
 import itchat
 import _thread
 import os
-import time
 
 name = ""
 doc = []
@@ -17,9 +16,7 @@ def printDoc():
     for i in doc:
         print(i)
     print("=====================================")
-    time.sleep(2)
     inp = input("")
-
 
 def sendMsg():
     global name
@@ -31,7 +28,6 @@ def sendMsg():
             break
         if name == "filehelper":  # 如果是发送给自己的文件助手
             name = "filehelper"
-
         else:
             user = itchat.search_friends(name=name)
             if len(user) == 0:
@@ -42,15 +38,12 @@ def sendMsg():
         print("===进入和 [", name, "]的聊天界面====")
         while True:
             printDoc()
-
             if inp == "exit":
                 break
             else:
                 itchat.send_msg(inp, toUserName=name)
                 s = "me => " + inp
                 doc.append(s)
-
-
 
 @itchat.msg_register(itchat.content.TEXT, isFriendChat=True)
 def text_reply(msg):
@@ -62,8 +55,6 @@ def text_reply(msg):
         printDoc()
     return
 
-
 _thread.start_new_thread(sendMsg, ())
-# itchat.auto_login(enableCmdQR=1, hotReload=True) # 如果是在window上或者有可视化界面的ubuntu系统上，可以用这个
 itchat.auto_login(enableCmdQR=0, hotReload=True)  # enableCmdQR=1是在控制台输出微信登录二维码
 itchat.run()
